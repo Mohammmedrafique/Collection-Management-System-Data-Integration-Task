@@ -3,6 +3,7 @@ const { google } = require("googleapis");
 const mongoose = require("mongoose");
 const Case = require("./models/Case"); // Import the model
 const cron = require("node-cron");
+require('dotenv').config()
 const app = express();
 
 app.use(express.json());
