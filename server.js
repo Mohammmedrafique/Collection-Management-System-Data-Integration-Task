@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Case = require("./models/Case"); // Import the model
 const cron = require("node-cron");
 const app = express();
-require("dotenv").config();
+
 app.use(express.json());
 
 const authentication = async () => {
@@ -20,10 +20,11 @@ const authentication = async () => {
 const id = `1ficKwe-cHK8EJa4lWTNI_obseOUDta-Uh0E3P6LCgZc`;
 
 // MongoDB connection details
-const uri = process.env.mongo;
+const uri =
+  "mongodb+srv://hello:hello@cluster0.rxleklg.mongodb.net/final?retryWrites=true&w=majority&appName=Cluster0"; // Update with your MongoDB URI
 
 mongoose
-  .connect(uri)
+  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log("Failed to connect to MongoDB", err));
 
@@ -71,15 +72,25 @@ const fetchDataAndUpdateDB = async () => {
   }
 };
 
-// Schedule task to run at 10:14 PM IST daily
+app.get("/add", async (req, res) => {
+  try {
+    await fetchDataAndUpdateDB();
+    res.send("Data successfully stored/updated in MongoDB");
+  } catch (e) {
+    console.log(e);
+    res.status(500).send();
+  }
+});
+
+// Schedule tasks to run at 10 AM and 5 PM IST daily
 cron.schedule("0 0 10 * * *", fetchDataAndUpdateDB, {
   timezone: "Asia/Kolkata",
 });
 
-cron.schedule("0 0 17 * * *", fetchDataAndUpdateDB, {
+cron.schedule("0 25 15 * * *", fetchDataAndUpdateDB, {
   timezone: "Asia/Kolkata",
 });
 
-app.listen(process.env.PORT, () => {
-  console.log("Server is running");
+app.listen(5000, () => {
+  console.log("server is running");
 });
