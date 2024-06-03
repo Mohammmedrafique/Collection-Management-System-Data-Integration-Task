@@ -20,8 +20,7 @@ const authentication = async () => {
 const id = `1ficKwe-cHK8EJa4lWTNI_obseOUDta-Uh0E3P6LCgZc`;
 
 // MongoDB connection details
-const uri =
-  "mongodb+srv://hello:hello@cluster0.rxleklg.mongodb.net/final?retryWrites=true&w=majority&appName=Cluster0"; // Update with your MongoDB URI
+const uri = process.env.mongo
 
 mongoose
   .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -91,6 +90,6 @@ cron.schedule("0 25 15 * * *", fetchDataAndUpdateDB, {
   timezone: "Asia/Kolkata",
 });
 
-app.listen(5000, () => {
+app.listen(process.env.PORT, () => {
   console.log("server is running");
 });
